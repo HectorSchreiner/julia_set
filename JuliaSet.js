@@ -3,12 +3,12 @@ let cRe, cIm;
 let newRe, newIm, oldRe, oldIm;
 let maxIterations = 128;
 
+
 function setup() {
   createCanvas(800, 800);
   pixelDensity(1);
-
-  cRe = 0.3;
-  cIm = 0.1;
+  cRe = 0;
+  cIm = 0;
 }
 
 function draw() {
@@ -50,6 +50,15 @@ function draw() {
   }
 
   updatePixels();
+}
+
+function mouseClicked() {
+  getConstantValues();
+}
+
+function getConstantValues(){
+    cRe = -1 + mouseX/width*2;
+    cIm = -1 + mouseY/height*2;
 }
 
 // farver en given pixel(x,y) med rgb value
