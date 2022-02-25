@@ -3,11 +3,10 @@ let minVal, maxVal;
 let marker;
 let iterSlider_mandelbrot;
 
-
 let mandelbrotSet = function (sketch) {
     sketch.setup = function () {
 
-        iterSlider_mandelbrot = sketch.createSlider(8, 256, 20, 8);
+        iterSlider_mandelbrot = sketch.createSlider(8, 256, 128, 8);
         minVal = -2;
         maxVal = 2;
 
@@ -34,30 +33,10 @@ let mandelbrotSet = function (sketch) {
 
                 let i = calculateMandelbrotSet(x, y, maxIterations_Mandelbrot, sketch);
 
-                // let c_a = a;
-                // let c_b = b;
-
-                // let i = 0;
-
-                // while (i < maxIterations_Mandelbrot) {
-                //     let a_new = a * a - b * b;
-                //     let b_new = 2 * a * b;
-                //     a = a_new + c_a;
-                //     b = b_new + c_b;
-
-                //     if (sketch.abs(a + b) > 4) {
-                //         break;
-                //     }
-
-                //     i++;
-                // }
-
                 //giver colorvalue baseret på antal iterations
                 let color_val_mandel = sketch.map(i, 0, maxIterations_Mandelbrot, 0, 255)
 
                 colorPixel(x, y, color_val_mandel, color_val_mandel, color_val_mandel, sketch);
-
-
             }
         }
         sketch.updatePixels();
@@ -65,7 +44,6 @@ let mandelbrotSet = function (sketch) {
 
             if (sketch.mouseX > 0 && sketch.mouseX < width && sketch.mouseY > canvasOffset && sketch.mouseY < height + canvasOffset) {
                 getConstantValues();
-                UI_marker(sketch.mouseX, sketch.mouseY, sketch)
             }
         }
 
@@ -74,64 +52,39 @@ let mandelbrotSet = function (sketch) {
             cIm = sketch.map(sketch.mouseY, 0, height, minVal, maxVal);
         }
     }
-
-
-    function UI_marker(x_pos, y_pos, sketch) {
-        sketch.fill("red");
-        sketch.strokeWeight(2);
-        sketch.ellipse(x_pos, y_pos, 10);
-        console.log(sketch.mouseX, sketch.mouseY);
-    }
 }
 
 new p5(mandelbrotSet);
 
-// let c_a = a;
-// let c_b = b;
-
-// let i = 0;
-
-// while (i < maxIterations_Mandelbrot) {
-//     let a_new = a * a - b * b;
-//     let b_new = 2 * a * b;
-//     a = a_new + c_a;
-//     b = b_new + c_b;
-
-//     if (sketch.abs(a + b) > 4) {
-//         break;
-//     }
-
-//     i++;
-// }
-
 function calculateMandelbrotSet(x, y, maxDepth, sketch) {
 
+    // Her mappes x og y koordinatet til det komplekse koordinatsystem
     a = sketch.map(x, 0, width, minVal, maxVal);
     b = sketch.map(y, 0, height, minVal, maxVal);
 
+    // konstanterne gemmes
     const c_a = a;
     const c_b = b;
 
     function recurseMandelbrotSet(a, b, cDepth) {
+
+        // Hvis max dybde er nået -> er vi ikke i mandelbrot mængden-
+        // -og vi kan returnere max dybde. 
         if (cDepth == maxDepth) {
             return maxDepth;
         }
 
-        const a_new = a * a - b * b;
-        const b_new = 2 * a * b;
+        // Mandelbrot funktionen
+        const a_new = a * a - b * b + c_a; // 
+        const b_new = 2 * a * b + c_b;  
 
-        a = a_new + c_a;
-        b = b_new + c_b;
-
-        if (sketch.abs(a + b) > 4) {
+        // hvis c er udenfor cirklen med radius 2, returner antal iterationer det tog
+        if ((a_new*a_new + b_new*b_new) > 4) {
             return cDepth;
         }
 
-        return recurseMandelbrotSet(a, b, cDepth + 1)
+        // pas a og b igennem igen, og increment nuværende dybde med 1.
+        return recurseMandelbrotSet(a_new, b_new, cDepth + 1)
     }
-
-
-
     return recurseMandelbrotSet(a, b, 0);
 }
-
