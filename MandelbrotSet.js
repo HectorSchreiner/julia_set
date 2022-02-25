@@ -31,9 +31,10 @@ let mandelbrotSet = function (sketch) {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
 
-                let i = calculateMandelbrotSet(x, y, maxIterations_Mandelbrot, sketch);
-
                 //giver colorvalue baseret på antal iterations
+                let i = calculateMandelbrotSet(x, y, maxIterations_Mandelbrot, sketch);
+                
+                // mapper ned til tal mellem 0 og 255
                 let color_val_mandel = sketch.map(i, 0, maxIterations_Mandelbrot, 0, 255)
 
                 colorPixel(x, y, color_val_mandel, color_val_mandel, color_val_mandel, sketch);

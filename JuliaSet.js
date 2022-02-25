@@ -37,7 +37,7 @@ let juliaSet = function (sketch) {
     width = sketch.width;
   }
 
-  sketch.draw = function () {
+  sketch.draw = function () { // opdaterer hver frame
 
     maxIterations_Julia = iterSlider.value();
 
@@ -49,11 +49,14 @@ let juliaSet = function (sketch) {
     // går igennem hver pixel på canvas og farver derefter
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
-
+        
+        // sætter farven baseret på antal iterationer
         let i = calculateJuliaSet(x, y, maxIterations_Julia, sketch);
 
+        // mapper ned til tal mellem 0 og 255
         let color_val_julia = sketch.map(i, 0, maxIterations_Julia, 0, 255);
 
+        // giver nuværende koordinat, og farve til colopixel funktionen
         colorPixel(x, y, color_val_julia, color_val_julia, color_val_julia, sketch);
       }
     }
